@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище mailsModel" Provider="System.Data.SQLite.EF6" ProviderManifestToken="data source=&quot;C:\SharpDevelop Projects\EmailSender\EmailSender\mails.db&quot;" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="mail_types">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="integer" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+    <Property Name="Host" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+    <Property Name="Port" Type="integer" Nullable="false" />
+    <Property Name="SSL" Type="integer" Nullable="false" />
+  </EntityType>
+  <EntityType Name="mails">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="integer" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Subject" Type="nvarchar" MaxLength="2147483647" />
+    <Property Name="Body" Type="nvarchar" MaxLength="2147483647" />
+    <Property Name="Attachment" Type="nvarchar" MaxLength="2147483647" />
+    <Property Name="sender_id" Type="integer" Nullable="false" />
+    <Property Name="reciever_id" Type="integer" Nullable="false" />
+    <Property Name="sended" Type="nvarchar" MaxLength="2147483647" />
+  </EntityType>
+  <EntityType Name="recievers">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="integer" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+    <Property Name="added" Type="nvarchar" MaxLength="2147483647" />
+  </EntityType>
+  <EntityType Name="senders">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="integer" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+    <Property Name="mail_type_id" Type="integer" Nullable="false" />
+    <Property Name="added" Type="nvarchar" MaxLength="2147483647" />
+  </EntityType>
+  <Association Name="FK_mails_0_0">
+    <End Role="recievers" Type="Self.recievers" Multiplicity="1" />
+    <End Role="mails" Type="Self.mails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="recievers">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="mails">
+        <PropertyRef Name="reciever_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_mails_1_0">
+    <End Role="senders" Type="Self.senders" Multiplicity="1" />
+    <End Role="mails" Type="Self.mails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="senders">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="mails">
+        <PropertyRef Name="sender_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_senders_0_0">
+    <End Role="mail_types" Type="Self.mail_types" Multiplicity="1" />
+    <End Role="senders" Type="Self.senders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="mail_types">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="senders">
+        <PropertyRef Name="mail_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище mailsModelContainer">
+    <EntitySet Name="mail_types" EntityType="Self.mail_types" store:Type="Tables" />
+    <EntitySet Name="mails" EntityType="Self.mails" store:Type="Tables" />
+    <EntitySet Name="recievers" EntityType="Self.recievers" store:Type="Tables" />
+    <EntitySet Name="senders" EntityType="Self.senders" store:Type="Tables" />
+    <AssociationSet Name="FK_mails_0_0" Association="Self.FK_mails_0_0">
+      <End Role="recievers" EntitySet="recievers" />
+      <End Role="mails" EntitySet="mails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_mails_1_0" Association="Self.FK_mails_1_0">
+      <End Role="senders" EntitySet="senders" />
+      <End Role="mails" EntitySet="mails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_senders_0_0" Association="Self.FK_senders_0_0">
+      <End Role="mail_types" EntitySet="mail_types" />
+      <End Role="senders" EntitySet="senders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

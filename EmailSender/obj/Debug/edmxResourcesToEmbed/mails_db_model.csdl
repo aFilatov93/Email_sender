@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="mailsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="mail_types">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Host" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Port" Type="Int64" Nullable="false" />
+    <Property Name="SSL" Type="Int64" Nullable="false" />
+    <NavigationProperty Name="senders" Relationship="Self.FK_senders_0_0" FromRole="mail_types" ToRole="senders" />
+  </EntityType>
+  <EntityType Name="mails">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Subject" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+    <Property Name="Body" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+    <Property Name="Attachment" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+    <Property Name="sender_id" Type="Int64" Nullable="false" />
+    <Property Name="reciever_id" Type="Int64" Nullable="false" />
+    <Property Name="sended" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="recievers" Relationship="Self.FK_mails_0_0" FromRole="mails" ToRole="recievers" />
+    <NavigationProperty Name="senders" Relationship="Self.FK_mails_1_0" FromRole="mails" ToRole="senders" />
+  </EntityType>
+  <EntityType Name="recievers">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="added" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="mails" Relationship="Self.FK_mails_0_0" FromRole="recievers" ToRole="mails" />
+  </EntityType>
+  <EntityType Name="senders">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="mail_type_id" Type="Int64" Nullable="false" />
+    <Property Name="added" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="mail_types" Relationship="Self.FK_senders_0_0" FromRole="senders" ToRole="mail_types" />
+    <NavigationProperty Name="mails" Relationship="Self.FK_mails_1_0" FromRole="senders" ToRole="mails" />
+  </EntityType>
+  <Association Name="FK_senders_0_0">
+    <End Role="mail_types" Type="Self.mail_types" Multiplicity="1" />
+    <End Role="senders" Type="Self.senders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="mail_types">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="senders">
+        <PropertyRef Name="mail_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_mails_0_0">
+    <End Role="recievers" Type="Self.recievers" Multiplicity="1" />
+    <End Role="mails" Type="Self.mails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="recievers">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="mails">
+        <PropertyRef Name="reciever_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_mails_1_0">
+    <End Role="senders" Type="Self.senders" Multiplicity="1" />
+    <End Role="mails" Type="Self.mails" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="senders">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="mails">
+        <PropertyRef Name="sender_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="mailsEntities3" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="mail_types" EntityType="Self.mail_types" />
+    <EntitySet Name="mails" EntityType="Self.mails" />
+    <EntitySet Name="recievers" EntityType="Self.recievers" />
+    <EntitySet Name="senders" EntityType="Self.senders" />
+    <AssociationSet Name="FK_senders_0_0" Association="Self.FK_senders_0_0">
+      <End Role="mail_types" EntitySet="mail_types" />
+      <End Role="senders" EntitySet="senders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_mails_0_0" Association="Self.FK_mails_0_0">
+      <End Role="recievers" EntitySet="recievers" />
+      <End Role="mails" EntitySet="mails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_mails_1_0" Association="Self.FK_mails_1_0">
+      <End Role="senders" EntitySet="senders" />
+      <End Role="mails" EntitySet="mails" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
